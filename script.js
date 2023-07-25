@@ -35,7 +35,33 @@ const displayController = (() => {
       playerOne.classList.remove('scale');
     }
   };
-  return { displayMarkers, displayPlayers, scalePlayerTurn };
+
+  const displayStartMenu = () => {
+    const modalStartMenu = document.querySelector('.modal-start');
+    const startGameButton = document.querySelector('.start-game');
+    hideGameBoard();
+    startGameButton.addEventListener('click', () => {
+      // for now
+      modalStartMenu.parentElement.classList.add('invisible');
+      showGameBoard();
+    });
+  };
+
+  const displayWinner = () => {
+    const modalWinner = document.querySelector('.modal-winner');
+  };
+
+  const hideGameBoard = () => {
+    const gameBoardContainer = document.querySelector('.gameboard-container');
+    gameBoardContainer.style.display = 'none';
+  };
+
+  const showGameBoard = () => {
+    const gameBoardContainer = document.querySelector('.gameboard-container');
+    gameBoardContainer.style.display = 'flex';
+  };
+
+  return { displayMarkers, displayPlayers, scalePlayerTurn, displayStartMenu };
 })();
 
 const gameBoard = (() => {
@@ -90,5 +116,6 @@ const gameBoard = (() => {
   return { attachEvent };
 })();
 
+displayController.displayStartMenu();
 displayController.displayPlayers();
 gameBoard.attachEvent();
