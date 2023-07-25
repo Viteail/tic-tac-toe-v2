@@ -2,11 +2,11 @@ const game = {
   gameboard: ['', '', '', '', '', '', '', '', ''],
   players: {
     playerOne: {
-      name: 'Player One',
+      name: '',
       marker: 'X',
     },
     playerTwo: {
-      name: 'Player Two',
+      name: '',
       marker: 'O',
     },
   },
@@ -38,14 +38,12 @@ const displayController = (() => {
 
   const displayStartMenu = () => {
     const modalStartMenu = document.querySelector('.modal-start');
-    const startGameButton = document.querySelector('.start-game');
+    const playButton = document.querySelector('.play-game');
     hideGameBoard();
     modalStartMenu.classList.remove('invisible');
-    startGameButton.addEventListener('click', () => {
-      // for now
-      modalStartMenu.parentElement.classList.add('invisible');
+    playButton.addEventListener('click', () => {
       modalStartMenu.classList.add('invisible');
-      showGameBoard();
+      displayModeSelection();
     });
   };
 
@@ -69,6 +67,29 @@ const displayController = (() => {
       modalWinner.classList.add('invisible');
       gameBoard.restartGame();
       displayStartMenu();
+    });
+  };
+
+  const displayModeSelection = () => {
+    const modalSelection = document.querySelector('.modal-selection');
+    const pvpButton = document.querySelector('.pvp-mode');
+    modalSelection.classList.remove('invisible');
+    pvpButton.addEventListener('click', () => {
+      modalSelection.classList.add('invisible');
+      displayPlayersModal();
+    });
+  };
+
+  const displayPlayersModal = () => {
+    const modalPlayerNames = document.querySelector('.modal-player-names');
+    const startGameButton = document.querySelector('.start-game');
+    modalPlayerNames.classList.remove('invisible');
+
+    startGameButton.addEventListener('click', () => {
+      modalPlayerNames.classList.add('invisible');
+      modalPlayerNames.parentElement.classList.add('invisible');
+      gameBoard.namePlayers();
+      showGameBoard();
     });
   };
 
@@ -148,9 +169,21 @@ const gameBoard = (() => {
     displayController.scalePlayerTurn(currentPlayerTurn);
     displayController.displayMarkers(gameboardElement);
   };
-  return { attachEvent, restartGame };
+
+  const namePlayers = () => {
+    const playerOneInput = document.querySelector('#player-one');
+    const playerTwoInput = document.querySelector('#player-two');
+    game.players.playerOne.name = playerOneInput.value;
+    game.players.playerTwo.name = playerTwoInput.value;
+    if (game.players.playerOne.name === '')
+      game.players.playerOne.name = playerOneInput.getAttribute('placeholder');
+    if (game.players.playerTwo.name === '')
+      game.players.playerTwo.name = playerTwoInput.getAttribute('placeholder');
+    displayController.displayPlayers();
+  };
+
+  return { attachEvent, restartGame, namePlayers };
 })();
 
 displayController.displayStartMenu();
-displayController.displayPlayers();
 gameBoard.attachEvent();
