@@ -40,28 +40,55 @@ const displayController = (() => {
     const modalStartMenu = document.querySelector('.modal-start');
     const startGameButton = document.querySelector('.start-game');
     hideGameBoard();
+    modalStartMenu.classList.remove('invisible');
     startGameButton.addEventListener('click', () => {
       // for now
       modalStartMenu.parentElement.classList.add('invisible');
+      modalStartMenu.classList.add('invisible');
       showGameBoard();
     });
   };
 
-  const displayWinner = () => {
+  const displayWinner = (winner) => {
     const modalWinner = document.querySelector('.modal-winner');
+    const winnerTitle = document.querySelector('.winner-title');
+    const restartButton = document.querySelector('.restart');
+    const returnButton = document.querySelector('.return');
+    hideGameBoard();
+    modalWinner.parentElement.classList.remove('invisible');
+    modalWinner.classList.remove('invisible');
+    winnerTitle.textContent = `${winner}`;
+
+    restartButton.addEventListener('click', () => {
+      modalWinner.parentElement.classList.add('invisible');
+      showGameBoard();
+      gameBoard.restartGame();
+    });
+
+    returnButton.addEventListener('click', () => {
+      modalWinner.classList.add('invisible');
+      gameBoard.restartGame();
+      displayStartMenu();
+    });
   };
 
   const hideGameBoard = () => {
     const gameBoardContainer = document.querySelector('.gameboard-container');
-    gameBoardContainer.style.display = 'none';
+    gameBoardContainer.classList.add('invisible');
   };
 
   const showGameBoard = () => {
     const gameBoardContainer = document.querySelector('.gameboard-container');
-    gameBoardContainer.style.display = 'flex';
+    gameBoardContainer.classList.remove('invisible');
   };
 
-  return { displayMarkers, displayPlayers, scalePlayerTurn, displayStartMenu };
+  return {
+    displayMarkers,
+    displayPlayers,
+    scalePlayerTurn,
+    displayStartMenu,
+    displayWinner,
+  };
 })();
 
 const gameBoard = (() => {
@@ -107,13 +134,21 @@ const gameBoard = (() => {
     });
     for (let i = 0; i < Object.keys(winCondition).length; i++) {
       if (winCondition[i].every((value) => indexes.includes(value)))
-        return alert(`${player.name} WON!`);
+        return displayController.displayWinner(`${player.name} has Won!`);
       else if (game.gameboard.every((value) => value !== ''))
-        return alert("It's a TIE!");
+        return displayController.displayWinner("It's a Tie!");
     }
     console.log(indexes, winCondition);
   };
-  return { attachEvent };
+
+  const restartGame = () => {
+    const gameboardElement = document.querySelector('.gameboard');
+    game.gameboard = ['', '', '', '', '', '', '', '', ''];
+    currentPlayerTurn = game.players.playerOne;
+    displayController.scalePlayerTurn(currentPlayerTurn);
+    displayController.displayMarkers(gameboardElement);
+  };
+  return { attachEvent, restartGame };
 })();
 
 displayController.displayStartMenu();

@@ -101,6 +101,7 @@ body {
   background: var(--gray-50);
 }
 
+.modal-start,
 .modal-winner {
   display: flex;
   flex-direction: column;
@@ -111,13 +112,14 @@ body {
   border-radius: 20px;
   box-shadow: 2px 2px 5px var(--gray-300);
   background: var(--white);
+  animation: appear 200ms linear;
 }
 
 .game-title {
   font-size: 5rem;
 }
 
-.modal-winner > .button-container {
+.modal-start > .button-container {
   display: flex;
   align-items: center;
   flex: 1;
@@ -133,6 +135,35 @@ body {
 }
 
 .start-game:hover {
+  transform: scale(1.1);
+  transition: 200ms;
+}
+
+.winner-title {
+  text-align: center;
+  font-size: 5rem;
+  word-break: break-word;
+}
+
+.modal-winner > .button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.return,
+.restart {
+  cursor: pointer;
+  font-family: Outline;
+  font-size: 3rem;
+  border: none;
+  background: var(--white);
+}
+
+.return:hover,
+.restart:hover {
   transform: scale(1.1);
   transition: 200ms;
 }
